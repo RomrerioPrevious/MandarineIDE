@@ -1,6 +1,3 @@
-from bin.models import File
-
-
 def main():
     ...
 
