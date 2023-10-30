@@ -2,7 +2,7 @@ from bin.handlers.code_parser import CodeParser
 
 
 def main():
-    x = CodeParser("D:\g.py")
+    x = CodeParser("")
     print(x.parse_code())
 
 

@@ -15,8 +15,8 @@ class TokenTypeList:
             "Comparisons": TokenType("Comparisons",
                                      words=["==", "!=", "!", "<", ">", "<=", ">="]),
             "Special characters": TokenType("Special characters",
-                                            words=[".", ",", "/", "*", "-", "+", ":"]),
-            "Variable": TokenType("Variable"),
-            "Function": TokenType("Function"),
-            "Class": TokenType("Class")
+                                            words=[".", ",", "/", "*", "-", "+", ":", "=", " ", "(", ")", "\n"]),
+            "Variable": TokenType("Variable", words=None),
+            "Function": TokenType("Function", words=None),
+            "Class": TokenType("Class", words=None)
         }

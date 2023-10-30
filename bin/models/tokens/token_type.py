@@ -1,9 +1,10 @@
+from dataclasses import dataclass
+
+
+@dataclass
 class TokenType:
-    def __init__(self, name: str, **kwargs):
-        self.name = name
-        self.objects = None
-        if "words" in kwargs.keys():
-            self.objects = filter(lambda a: isinstance(a, str), kwargs["words"])
+    name: str
+    words: [str]
 
     def __eq__(self, other):
         if not isinstance(other, TokenType):
