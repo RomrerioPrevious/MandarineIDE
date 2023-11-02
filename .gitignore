@@ -1,2 +1,4 @@
-resources
-tests
+/resources
+/tests
+.idea
+__pycache__
