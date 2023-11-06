@@ -24,9 +24,7 @@ path text
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="b19b854b-7eeb-461f-ba71-059215b917f4" object-ref="consoles/Projects" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
