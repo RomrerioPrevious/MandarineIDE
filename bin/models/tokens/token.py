@@ -7,5 +7,5 @@ class Token:
     name: str
     type: TokenType
 
-    def __str__(self) -> str:
-        return f"Token(name='{self.name}', type={self.type})"
+    def __hash__(self):
+        return self.name.__hash__()

@@ -5,6 +5,9 @@ from bin.handlers.code_parser.token_creater import TokenCreator
 class CodeParser:
     def __init__(self, path: str):
         self.path = path
+        self.scope = {"Function": set(),
+                      "Variable": set(),
+                      "Class": set()}
 
     def parse_code(self):
         with open(self.path, mode="r", encoding="UTF8") as file:
@@ -14,16 +17,18 @@ class CodeParser:
                     break
                 yield self.parse_code_from_line(line)
 
-    @staticmethod
-    def parse_code_from_line(line: str) -> [Token]:
+    def parse_code_from_line(self, line: str) -> [Token]:
         words = CodeParser.split(line)
         tokens = [TokenCreator.token_fabric(words[0], None)]
         for i in range(1, len(words), 1):
             word = words[i]
             if words[i - 1] in ["def", "class"]:
-                tokens.append(TokenCreator.token_fabric(word, words[i - 1]))
+                token = TokenCreator.token_fabric(word, words[i - 1])
             else:
-                tokens.append(TokenCreator.token_fabric(word, None))
+                token = TokenCreator.token_fabric(word)
+            tokens.append(token)
+            if token.type.name in self.scope.keys():
+                self.scope[token.type.name].add(token)
         return tokens
 
     @staticmethod
