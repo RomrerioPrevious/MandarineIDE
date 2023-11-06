@@ -6,15 +6,13 @@ class CodeParser:
     def __init__(self, path: str):
         self.path = path
 
-    def parse_code(self) -> [[Token]]:
-        tokens = []
+    def parse_code(self):
         with open(self.path, mode="r", encoding="UTF8") as file:
             while True:
                 line = file.readline()
                 if not line:
                     break
-                tokens.append(self.parse_code_from_line(line))
-        return tokens
+                yield self.parse_code_from_line(line)
 
     @staticmethod
     def parse_code_from_line(line: str) -> [Token]:
