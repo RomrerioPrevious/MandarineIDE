@@ -19,11 +19,13 @@ class CodeParser:
 
     def parse_code_from_line(self, line: str) -> [Token]:
         words = CodeParser.split(line)
-        tokens = [TokenCreator.token_fabric(words[0], None)]
-        for i in range(1, len(words), 1):
+        tokens = [TokenCreator.token_fabric(words[0])]
+        if len(words) != 1:
+            tokens.append(TokenCreator.token_fabric(words[1]))
+        for i in range(2, len(words), 1):
             word = words[i]
-            if words[i - 1] in ["def", "class"]:
-                token = TokenCreator.token_fabric(word, words[i - 1])
+            if words[i - 2] in ["def", "class"]:
+                token = TokenCreator.token_fabric(word, words[i - 2])
             else:
                 token = TokenCreator.token_fabric(word)
             tokens.append(token)

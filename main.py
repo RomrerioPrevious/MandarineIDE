@@ -2,7 +2,7 @@ from bin.handlers.code_parser import CodeParser
 
 
 def main():
-    x = CodeParser("")
+    x = CodeParser("D://Save//MandarinIDE//tests//any_directory//1.py")
     print(x.parse_code())
 
 
