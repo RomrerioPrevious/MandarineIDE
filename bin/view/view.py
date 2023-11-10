@@ -101,13 +101,19 @@ class MainWindow:
         self.statusbar.setObjectName("statusbar")
         main_window.setStatusBar(self.statusbar)
 
+        self.create_menu(main_window)
+        self.retranslateUi(main_window)
+        self.tabWidget.setCurrentIndex(1)
+        QtCore.QMetaObject.connectSlotsByName(main_window)
+
+    def create_menu(self, main_window):
         self.menubar = QtWidgets.QMenuBar(main_window)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 857, 24))
         self.menubar.setObjectName("menubar")
         self.menuMandarin = QtWidgets.QMenu(self.menubar)
         self.menuMandarin.setObjectName("menuMandarin")
-        self.menuBinds = QtWidgets.QMenu(self.menubar)
-        self.menuBinds.setObjectName("menuBinds")
+        self.menuEdit = QtWidgets.QMenu(self.menubar)
+        self.menuEdit.setObjectName("menuBinds")
         self.menuRun = QtWidgets.QMenu(self.menubar)
         self.menuRun.setObjectName("menuRun")
 
@@ -137,18 +143,14 @@ class MainWindow:
         self.menuMandarin.addAction(self.actionOpen)
         self.menuMandarin.addAction(self.actionOpen_Folder)
         self.menuMandarin.addAction(self.actionSave)
-        self.menuBinds.addAction(self.actionUndo)
-        self.menuBinds.addAction(self.actionCut)
-        self.menuBinds.addAction(self.actionCopy)
-        self.menuBinds.addAction(self.actionPaste)
+        self.menuEdit.addAction(self.actionUndo)
+        self.menuEdit.addAction(self.actionCut)
+        self.menuEdit.addAction(self.actionCopy)
+        self.menuEdit.addAction(self.actionPaste)
         self.menuRun.addAction(self.actionRun)
         self.menubar.addAction(self.menuMandarin.menuAction())
-        self.menubar.addAction(self.menuBinds.menuAction())
+        self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuRun.menuAction())
-
-        self.retranslateUi(main_window)
-        self.tabWidget.setCurrentIndex(1)
-        QtCore.QMetaObject.connectSlotsByName(main_window)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -166,7 +168,7 @@ class MainWindow:
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Tab 2"))
 
         self.menuMandarin.setTitle(_translate("MainWindow", "File"))
-        self.menuBinds.setTitle(_translate("MainWindow", "Edit"))
+        self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
         self.menuRun.setTitle(_translate("MainWindow", "Run"))
         self.actionNew.setText(_translate("MainWindow", "New Project"))
         self.actionOpen.setText(_translate("MainWindow", "Open Project"))

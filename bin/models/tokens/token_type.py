@@ -10,6 +10,3 @@ class TokenType:
         if not isinstance(other, TokenType):
             raise TypeError(f"Type of object {other} is not TokenType")
         return other.name == self.name
-
-    def __str__(self):
-        return self.name
