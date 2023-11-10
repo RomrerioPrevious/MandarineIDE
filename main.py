@@ -1,14 +1,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from bin.view.view import Ui_MainWindow
+from bin.view.view import MainWindow
+import sys
 
 
 def main():
-    import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    window = QtWidgets.QMainWindow()
+    ui = MainWindow(window)
+    ui.setupUi(window)
+    window.show()
     sys.exit(app.exec_())
 
 
