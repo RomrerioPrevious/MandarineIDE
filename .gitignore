@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 /resources
 /tests
 .idea
 __pycache__
 tests
+=======
+tests
+>>>>>>> options

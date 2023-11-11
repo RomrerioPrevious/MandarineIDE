@@ -1,1 +1,1 @@
-from .Folder_parser import Folder_parser
+from .folder_parser import Folder_parser

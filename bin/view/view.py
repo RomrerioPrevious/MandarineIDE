@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from bin.view.painter import Painter
 
 
 class MainWindow:
@@ -158,6 +159,8 @@ class MainWindow:
         textEdit.setStyleSheet(f"background-color: rgb({self.theme['work_space']});\n"
                                f"color: rgb({self.theme['white']});")
         textEdit.setObjectName("textEdit")
+        painter = Painter(qedit=textEdit, theme=self.theme, path="D://Save//MandarinIDE//tests//any_directory//1.py")
+        painter.colorize()
         self.text_edits[name] = textEdit
 
         horizontalLayout.addWidget(textEdit)
