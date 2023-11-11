@@ -11,7 +11,8 @@ Mandaine IDE is IDE for python.
 
 ## Librares
 
-- PyQT5
+- Python (3.10.4)
+- PyQT5 (5.15.9)
 - dataclass
 - subprocess
 

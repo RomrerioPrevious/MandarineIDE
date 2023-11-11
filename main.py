@@ -7,7 +7,7 @@ def main():
     app = QtWidgets.QApplication(sys.argv)
     window = QtWidgets.QMainWindow()
     ui = MainWindow(window)
-    ui.setupUi(window)
+    ui.setupUi()
     window.show()
     sys.exit(app.exec_())
 

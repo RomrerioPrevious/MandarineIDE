@@ -5,15 +5,19 @@ import json
 class MainWindow:
     def __init__(self, main_window: QtWidgets.QMainWindow):
         self.theme = self.get_theme()
-        main_window.setObjectName("MainWindow")
-        main_window.resize(857, 612)
-        main_window.setAutoFillBackground(False)
-        main_window.setStyleSheet(f"background-color: rgb({self.theme['background']});\n"
+        self.tabs = []
+        self.layouts = []
+        self.translate = QtCore.QCoreApplication.translate
+        self.main_window = main_window
+        self.main_window.setObjectName("MainWindow")
+        self.main_window.resize(1200, 800)
+        self.main_window.setAutoFillBackground(False)
+        self.main_window.setStyleSheet(f"background-color: rgb({self.theme['background']});\n"
                                   f"font: 9pt \"Droid Sans\";\n"
                                   f"color: rgb(209, 209, 209);\n"
                                   f"border-radius: 5px;")
 
-        self.setupUi(main_window)
+        self.setupUi()
 
     def get_theme(self) -> {str: str}:
         return {
@@ -22,21 +26,61 @@ class MainWindow:
             "white": "255, 255, 255"
         }
 
-    def setupUi(self, main_window):
-        self.centralwidget = QtWidgets.QWidget(main_window)
+    def setupUi(self):
+        self.create_basic_widgets()
+        self.create_file_menu()
+
+        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
+        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
+
+        self.horizontalLayout.addWidget(self.treeWidget)
+
+        self.create_tabs()
+        self.add_new_tab("1")
+        self.add_new_tab("2")
+
+        self.horizontalLayout.addWidget(self.tabWidget)
+
+        self.create_scroll_bar()
+
+        self.main_window.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(self.main_window)
+        self.statusbar.setObjectName("statusbar")
+        self.main_window.setStatusBar(self.statusbar)
+
+        self.create_menu(self.main_window)
+        self.retranslateUi(self.main_window)
+        self.tabWidget.setCurrentIndex(1)
+        QtCore.QMetaObject.connectSlotsByName(self.main_window)
+
+    def create_tabs(self):
+        self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
+        self.tabWidget.setStyleSheet(f"background-color: rgb({self.theme['background']});\n"
+                                     f"alternate-background-color: rgb({self.theme['work_space']});\n"
+                                     f"font: 10pt \"Droid Sans\";\n"
+                                     f"color: rgb({self.theme['work_space']});")
+
+    def create_basic_widgets(self):
+        self.centralwidget = QtWidgets.QWidget(self.main_window)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
-
         self.horizontalLayout.setObjectName("horizontalLayout")
 
+    def create_scroll_bar(self):
+        self.verticalScrollBar = QtWidgets.QScrollBar(self.centralwidget)
+        self.verticalScrollBar.setStyleSheet("background-color: rgb(65, 71, 83);\n"
+                                             f"selection-background-color: rgb({self.theme['background']});")
+        self.verticalScrollBar.setOrientation(QtCore.Qt.Vertical)
+        self.verticalScrollBar.setObjectName("verticalScrollBar")
+        self.horizontalLayout.addWidget(self.verticalScrollBar)
+
+    def create_file_menu(self):
         self.treeWidget = QtWidgets.QTreeWidget(self.centralwidget)
         self.treeWidget.setEnabled(True)
-
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
-
         self.treeWidget.setSizePolicy(sizePolicy)
         self.treeWidget.setMinimumSize(QtCore.QSize(0, 0))
         self.treeWidget.setAutoFillBackground(True)
@@ -45,66 +89,6 @@ class MainWindow:
                                       f"alternate-background-color: rgb({self.theme['work_space']});\n"
                                       f"font: 10pt \"Droid Sans\";\n"
                                       f"color: rgb({self.theme['white']});")
-
-        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
-        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
-
-        self.horizontalLayout.addWidget(self.treeWidget)
-
-        self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
-        self.tabWidget.setStyleSheet(f"background-color: rgb({self.theme['background']});\n"
-                                     f"alternate-background-color: rgb({self.theme['work_space']});\n"
-                                     f"font: 10pt \"Droid Sans\";\n"
-                                     f"color: rgb({self.theme['work_space']});")
-        self.tabWidget.setObjectName("tabWidget")
-        self.tab = QtWidgets.QWidget()
-        self.tab.setObjectName("tab")
-
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.tab)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-
-        self.textEdit = QtWidgets.QTextEdit(self.tab)
-        self.textEdit.setStyleSheet(f"background-color: rgb({self.theme['work_space']});\n"
-                                    f"color: rgb({self.theme['white']});")
-        self.textEdit.setObjectName("textEdit")
-
-        self.horizontalLayout_2.addWidget(self.textEdit)
-
-        self.tabWidget.addTab(self.tab, "")
-        self.tab_2 = QtWidgets.QWidget()
-        self.tab_2.setObjectName("tab_2")
-
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.tab_2)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-
-        self.textEdit_2 = QtWidgets.QTextEdit(self.tab_2)
-        self.textEdit_2.setStyleSheet(f"background-color: rgb({self.theme['work_space']});\n"
-                                      f"color: rgb({self.theme['white']});")
-        self.textEdit_2.setObjectName("textEdit_2")
-
-        self.horizontalLayout_3.addWidget(self.textEdit_2)
-
-        self.tabWidget.addTab(self.tab_2, "")
-
-        self.horizontalLayout.addWidget(self.tabWidget)
-
-        self.verticalScrollBar = QtWidgets.QScrollBar(self.centralwidget)
-        self.verticalScrollBar.setStyleSheet("background-color: rgb(65, 71, 83);\n"
-                                             f"selection-background-color: rgb({self.theme['background']});")
-        self.verticalScrollBar.setOrientation(QtCore.Qt.Vertical)
-        self.verticalScrollBar.setObjectName("verticalScrollBar")
-
-        self.horizontalLayout.addWidget(self.verticalScrollBar)
-
-        main_window.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(main_window)
-        self.statusbar.setObjectName("statusbar")
-        main_window.setStatusBar(self.statusbar)
-
-        self.create_menu(main_window)
-        self.retranslateUi(main_window)
-        self.tabWidget.setCurrentIndex(1)
-        QtCore.QMetaObject.connectSlotsByName(main_window)
 
     def create_menu(self, main_window):
         self.menubar = QtWidgets.QMenuBar(main_window)
@@ -152,6 +136,28 @@ class MainWindow:
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuRun.menuAction())
 
+    def add_new_tab(self, name: str):
+        if not len(self.tabs):
+            self.tabWidget.setObjectName("tabWidget")
+        else:
+            self.tabWidget.addTab(self.tabs[-1], "")
+        tab = QtWidgets.QWidget()
+        tab.setObjectName(name)
+        self.tabs.append(tab)
+
+        horizontalLayout = QtWidgets.QHBoxLayout(tab)
+        horizontalLayout.setObjectName(f"horizontalLayout")
+
+        textEdit = QtWidgets.QTextEdit(tab)
+        textEdit.setStyleSheet(f"background-color: rgb({self.theme['work_space']});\n"
+                               f"color: rgb({self.theme['white']});")
+        textEdit.setObjectName("textEdit")
+
+        horizontalLayout.addWidget(textEdit)
+        self.layouts.append(horizontalLayout)
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabs[0]),
+                                  self.translate("MainWindow", name))
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Mandarine IDE"))
@@ -163,9 +169,6 @@ class MainWindow:
         self.treeWidget.topLevelItem(0).setText(0, _translate("MainWindow", "Main.py"))
         self.treeWidget.topLevelItem(1).setText(0, _translate("MainWindow", "Text.md"))
         self.treeWidget.setSortingEnabled(__sortingEnabled)
-
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Tab 1"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Tab 2"))
 
         self.menuMandarin.setTitle(_translate("MainWindow", "File"))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
