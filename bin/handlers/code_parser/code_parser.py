@@ -9,7 +9,7 @@ class CodeParser:
                       "Variable": set(),
                       "Class": set()}
 
-    def parse_code(self):
+    def parse_code(self) -> [Token]:
         with open(self.path, mode="r", encoding="UTF8") as file:
             while True:
                 line = file.readline()

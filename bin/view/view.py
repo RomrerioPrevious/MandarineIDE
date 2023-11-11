@@ -1,5 +1,4 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import json
 
 
 class MainWindow:
@@ -7,15 +6,16 @@ class MainWindow:
         self.theme = self.get_theme()
         self.tabs = []
         self.layouts = []
+        self.text_edits = {}
         self.translate = QtCore.QCoreApplication.translate
         self.main_window = main_window
         self.main_window.setObjectName("MainWindow")
         self.main_window.resize(1200, 800)
         self.main_window.setAutoFillBackground(False)
         self.main_window.setStyleSheet(f"background-color: rgb({self.theme['background']});\n"
-                                  f"font: 9pt \"Droid Sans\";\n"
-                                  f"color: rgb(209, 209, 209);\n"
-                                  f"border-radius: 5px;")
+                                       f"font: 9pt \"Droid Sans\";\n"
+                                       f"color: rgb(209, 209, 209);\n"
+                                       f"border-radius: 5px;")
 
         self.setupUi()
 
@@ -23,7 +23,13 @@ class MainWindow:
         return {
             "background": "40, 46, 57",
             "work_space": "48, 56, 65",
-            "white": "255, 255, 255"
+            "white": "255, 255, 255",
+            "reserved_words": "235, 55, 55",
+            "comparisons": "235, 55, 55",
+            "special_characters": "255, 255, 255",
+            "variable": "255, 255, 255",
+            "function": "130, 239, 20",
+            "class": "255, 255, 255"
         }
 
     def setupUi(self):
@@ -49,7 +55,7 @@ class MainWindow:
         self.main_window.setStatusBar(self.statusbar)
 
         self.create_menu(self.main_window)
-        self.retranslateUi(self.main_window)
+        self.retranslateUi()
         self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(self.main_window)
 
@@ -152,34 +158,34 @@ class MainWindow:
         textEdit.setStyleSheet(f"background-color: rgb({self.theme['work_space']});\n"
                                f"color: rgb({self.theme['white']});")
         textEdit.setObjectName("textEdit")
+        self.text_edits[name] = textEdit
 
         horizontalLayout.addWidget(textEdit)
         self.layouts.append(horizontalLayout)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabs[0]),
                                   self.translate("MainWindow", name))
 
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Mandarine IDE"))
+    def retranslateUi(self):
+        self.main_window.setWindowTitle(self.translate("MainWindow", "Mandarine IDE"))
 
-        self.treeWidget.setToolTip(_translate("MainWindow", "<html><head/><body><p><br/></p></body></html>"))
-        self.treeWidget.headerItem().setText(0, _translate("MainWindow", "MandarinIDE"))
+        self.treeWidget.setToolTip(self.translate("MainWindow", "<html><head/><body><p><br/></p></body></html>"))
+        self.treeWidget.headerItem().setText(0, self.translate("MainWindow", "MandarinIDE"))
         __sortingEnabled = self.treeWidget.isSortingEnabled()
         self.treeWidget.setSortingEnabled(False)
-        self.treeWidget.topLevelItem(0).setText(0, _translate("MainWindow", "Main.py"))
-        self.treeWidget.topLevelItem(1).setText(0, _translate("MainWindow", "Text.md"))
+        self.treeWidget.topLevelItem(0).setText(0, self.translate("MainWindow", "Main.py"))
+        self.treeWidget.topLevelItem(1).setText(0, self.translate("MainWindow", "Text.md"))
         self.treeWidget.setSortingEnabled(__sortingEnabled)
 
-        self.menuMandarin.setTitle(_translate("MainWindow", "File"))
-        self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
-        self.menuRun.setTitle(_translate("MainWindow", "Run"))
-        self.actionNew.setText(_translate("MainWindow", "New Project"))
-        self.actionOpen.setText(_translate("MainWindow", "Open Project"))
-        self.actionSave.setText(_translate("MainWindow", "Save"))
-        self.actionSave_as.setText(_translate("MainWindow", "Save as"))
-        self.actionUndo.setText(_translate("MainWindow", "Undo"))
-        self.actionCut.setText(_translate("MainWindow", "Cut"))
-        self.actionCopy.setText(_translate("MainWindow", "Copy"))
-        self.actionPaste.setText(_translate("MainWindow", "Paste"))
-        self.actionRun.setText(_translate("MainWindow", "Run"))
-        self.actionOpen_Folder.setText(_translate("MainWindow", "Open Folder"))
+        self.menuMandarin.setTitle(self.translate("MainWindow", "File"))
+        self.menuEdit.setTitle(self.translate("MainWindow", "Edit"))
+        self.menuRun.setTitle(self.translate("MainWindow", "Run"))
+        self.actionNew.setText(self.translate("MainWindow", "New Project"))
+        self.actionOpen.setText(self.translate("MainWindow", "Open Project"))
+        self.actionSave.setText(self.translate("MainWindow", "Save"))
+        self.actionSave_as.setText(self.translate("MainWindow", "Save as"))
+        self.actionUndo.setText(self.translate("MainWindow", "Undo"))
+        self.actionCut.setText(self.translate("MainWindow", "Cut"))
+        self.actionCopy.setText(self.translate("MainWindow", "Copy"))
+        self.actionPaste.setText(self.translate("MainWindow", "Paste"))
+        self.actionRun.setText(self.translate("MainWindow", "Run"))
+        self.actionOpen_Folder.setText(self.translate("MainWindow", "Open Folder"))
