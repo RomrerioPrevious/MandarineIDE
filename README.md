@@ -20,11 +20,11 @@ Mandaine IDE is IDE for python.
 
 ### Tokens
 
-Tokens is ...
+Tokens is parts of python code.
 
 #### Token
 
-Token is ...
+A token is a class that stores python words
 
 ```python
 @dataclass
@@ -38,7 +38,7 @@ class Token:
 
 #### TokenType
 
-TokenType is ...
+TokenType is class that stores standart type of token.
 
 ```python
 @dataclass
@@ -69,11 +69,11 @@ TokenTypeList is list of all python types.
 
 ### Parsers
 
-Parsers is ...
+Parsers is analyzers of code.
 
 #### Folder parser
 
-Folder parser is ...
+Folder parser is tree analyzer of paths.
 
 ```python
 from bin.models.folders import *
@@ -97,7 +97,7 @@ class Folder_parser:
 
 #### Code parser
 
-Code parser breaks the python code into tokens for further analysis and text coloring
+Code parser breaks the python code into tokens for further analysis and text coloring.
 
 ```python
 def parse_code_from_line(self, line: str) -> [Token]:
@@ -117,32 +117,11 @@ def parse_code_from_line(self, line: str) -> [Token]:
      return tokens
 ```
 
-#### Hint parser
-
-Hint parser is ...
-
-```python
-class HintParser:
-    def __init__(self, code_parser: CodeParser):
-        self.scope = code_parser.scope
-        self.all_hint = []
-        for token_type in TokenTypeList.get_token_types().items():
-            if token_type.words is None:
-                continue
-            self.all_hint.append(token_type.words)
-
-    def get_hints(self, word: str) -> [Hint]:
-        result = [*self.get_python_hints(word),
-                  *self.get_file_hints(word),
-                  ]
-        return result
-```
-
 ---
 
 ### Options
 
-Options is ...
+Options is buttons of options.
 
 #### Project Service
 
