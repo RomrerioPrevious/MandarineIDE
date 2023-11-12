@@ -7,9 +7,9 @@ class HintParser:
         self.scope = code_parser.scope
         self.all_hint = []
         for token_type in TokenTypeList.get_token_types().items():
-            if token_type.words is None:
+            if token_type[1].words is None:
                 continue
-            self.all_hint.append(token_type.words)
+            self.all_hint.append(token_type[1].words)
 
     def get_hints(self, word: str) -> [Hint]:
         result = [*self.get_python_hints(word),
@@ -23,8 +23,10 @@ class HintParser:
     def get_file_hints(self, word: str) -> [Hint]:
         result = []
         for i in self.scope.keys():
-            words = self.return_matches(self.scope[i], word, i)
-            result.append(*words)
+            words = self.return_matches(list(map(lambda token: token.name, self.scope[i])),
+                                        word, i)
+            if len(words):
+                result.append(*words)
         return result
 
     @staticmethod

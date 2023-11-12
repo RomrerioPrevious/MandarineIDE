@@ -1,10 +1,11 @@
 from PyQt5.QtGui import QColor, QTextCursor
-from PyQt5.QtWidgets import QTextEdit
+from PyQt5.QtWidgets import QTextEdit, QComboBox
 from bin.handlers.code_parser import CodeParser
 from bin.models.tokens import *
+from bin.handlers.hints import HintParser
 
 
-class Painter:
+class CodeEdit:
     def __init__(self, qedit: QTextEdit, path: str, theme: {str: str}):
         self.code_parser = CodeParser(path)
         self.qedit = qedit
@@ -12,6 +13,15 @@ class Painter:
         self.position = 0
         self.document = self.qedit.document()
         self.cursor = QTextCursor(self.document)
+
+    def hints_context_menu(self):
+        hints = HintParser(self.code_parser)
+        combo_box = QComboBox()
+        combo_box.addItems(
+            list(map(lambda hint: hint.inserted_code, hints.get_hints("i")))
+        )
+        combo_box.setEditable(True)
+        return combo_box
 
     def colorize(self):
         self.cursor.setPosition(0)

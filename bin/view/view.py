@@ -1,5 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from bin.view.painter import Painter
+from PyQt5.QtWidgets import QFileDialog
+
+from bin import Folder, File
+from bin.handlers.folder_parser import Folder_parser
+from bin.view.code_edit import CodeEdit
 
 
 class MainWindow:
@@ -17,7 +21,6 @@ class MainWindow:
                                        f"font: 9pt \"Droid Sans\";\n"
                                        f"color: rgb(209, 209, 209);\n"
                                        f"border-radius: 5px;")
-
         self.setupUi()
 
     def get_theme(self) -> {str: str}:
@@ -44,11 +47,8 @@ class MainWindow:
 
         self.create_tabs()
         self.add_new_tab("1")
-        self.add_new_tab("2")
 
         self.horizontalLayout.addWidget(self.tabWidget)
-
-        self.create_scroll_bar()
 
         self.main_window.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(self.main_window)
@@ -57,6 +57,7 @@ class MainWindow:
 
         self.create_menu(self.main_window)
         self.retranslateUi()
+        self.init_button_actions()
         self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(self.main_window)
 
@@ -72,14 +73,6 @@ class MainWindow:
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
-
-    def create_scroll_bar(self):
-        self.verticalScrollBar = QtWidgets.QScrollBar(self.centralwidget)
-        self.verticalScrollBar.setStyleSheet("background-color: rgb(65, 71, 83);\n"
-                                             f"selection-background-color: rgb({self.theme['background']});")
-        self.verticalScrollBar.setOrientation(QtCore.Qt.Vertical)
-        self.verticalScrollBar.setObjectName("verticalScrollBar")
-        self.horizontalLayout.addWidget(self.verticalScrollBar)
 
     def create_file_menu(self):
         self.treeWidget = QtWidgets.QTreeWidget(self.centralwidget)
@@ -143,6 +136,9 @@ class MainWindow:
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuRun.menuAction())
 
+    def init_button_actions(self):
+        ...
+
     def add_new_tab(self, name: str):
         if not len(self.tabs):
             self.tabWidget.setObjectName("tabWidget")
@@ -159,7 +155,7 @@ class MainWindow:
         textEdit.setStyleSheet(f"background-color: rgb({self.theme['work_space']});\n"
                                f"color: rgb({self.theme['white']});")
         textEdit.setObjectName("textEdit")
-        painter = Painter(qedit=textEdit, theme=self.theme, path="D://Save//MandarinIDE//tests//any_directory//1.py")
+        painter = CodeEdit(qedit=textEdit, theme=self.theme, path="D://Save//MandarinIDE//tests//any_directory//1.py")
         painter.colorize()
         self.text_edits[name] = textEdit
 
