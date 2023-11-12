@@ -1,17 +1,24 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QFileDialog
+import os
 
-from bin import Folder, File
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QFileDialog, QInputDialog, QWidget
+
+from bin import Folder, File, Runner
 from bin.handlers.folder_parser import Folder_parser
 from bin.view.code_edit import CodeEdit
 
 
 class MainWindow:
     def __init__(self, main_window: QtWidgets.QMainWindow):
+        self.slashes = []
         self.theme = self.get_theme()
         self.tabs = []
         self.layouts = []
-        self.text_edits = {}
+        self.text_edits = []
+        self.directionsList = []
+        self.directonsUsed = []
+        self.slashes = []
+        self.file_working = ""
         self.translate = QtCore.QCoreApplication.translate
         self.main_window = main_window
         self.main_window.setObjectName("MainWindow")
@@ -46,7 +53,6 @@ class MainWindow:
         self.horizontalLayout.addWidget(self.treeWidget)
 
         self.create_tabs()
-        self.add_new_tab("1")
 
         self.horizontalLayout.addWidget(self.tabWidget)
 
@@ -59,6 +65,7 @@ class MainWindow:
         self.retranslateUi()
         self.init_button_actions()
         self.tabWidget.setCurrentIndex(1)
+        self.init_button_actions()
         QtCore.QMetaObject.connectSlotsByName(self.main_window)
 
     def create_tabs(self):
@@ -137,9 +144,13 @@ class MainWindow:
         self.menubar.addAction(self.menuRun.menuAction())
 
     def init_button_actions(self):
-        ...
+        self.actionOpen.triggered.connect(self.open)
+        self.actionNew.triggered.connect(self.new)
+        self.actionSave.triggered.connect(self.save)
+        self.actionOpen_Folder.triggered.connect(self.open_folder)
+        self.actionRun.triggered.connect(self.run)
 
-    def add_new_tab(self, name: str):
+    def add_new_tab(self, name: str, path1: str):
         if not len(self.tabs):
             self.tabWidget.setObjectName("tabWidget")
         else:
@@ -155,14 +166,70 @@ class MainWindow:
         textEdit.setStyleSheet(f"background-color: rgb({self.theme['work_space']});\n"
                                f"color: rgb({self.theme['white']});")
         textEdit.setObjectName("textEdit")
-        painter = CodeEdit(qedit=textEdit, theme=self.theme, path="D://Save//MandarinIDE//tests//any_directory//1.py")
+        painter = CodeEdit(qedit=textEdit, theme=self.theme, path=path1)
         painter.colorize()
-        self.text_edits[name] = textEdit
+        self.text_edits.append(textEdit)
 
         horizontalLayout.addWidget(textEdit)
         self.layouts.append(horizontalLayout)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabs[0]),
                                   self.translate("MainWindow", name))
+
+    def open(self):
+        file_name = QFileDialog.getOpenFileName(self.centralwidget, 'Выберите файл', '')[0]
+        try:
+            self.add_new_tab(file_name, file_name)
+        except FileNotFoundError:
+            print(f"File {file_name} not")
+
+    def new(self):
+        try:
+            fname = QFileDialog.getExistingDirectory(self.centralwidget, "Выберите папку", ".")
+            rootdir = os.getcwd()
+            text, ok = QInputDialog.getText(QWidget(), 'Input Dialog', 'Ведите название файла:')
+            if ok:
+                file = open(f"{fname}/{str(text)}.py", "w")
+                self.file_working = f"{rootdir}/{file.name}"
+                self.text_edits[self.tabWidget.tabPosition()].setText(f"print('Hello World')")
+        except PermissionError:
+            return
+
+    def save(self):
+        code = self.text_edits[self.tabWidget.tabPosition()].toPlainText()
+        with open(self.file_working, "w") as file:
+            file.write(code)
+
+    def open_folder(self):
+        self.count = 0
+        fname = QFileDialog.getExistingDirectory(self.centralwidget, "Выберите папку", ".")
+        self.check_all_files(fname)
+
+    def check_all_files(self, fname):
+        try:
+            for file in os.listdir(fname)[::-1]:
+                slashRootCount = fname.count("\\")
+                self.slashes.append(slashRootCount)
+                direction = os.path.join(fname, file)
+                self.directionsList.append(str(direction))
+                if os.path.isdir(direction):
+                    self.check_all_files(direction)
+            for el in self.directionsList:
+                if el not in self.directonsUsed:
+                    self.directonsUsed.append(el)
+                    item = QtWidgets.QTreeWidgetItem(self.treeWidget)
+                    _translate = QtCore.QCoreApplication.translate
+                    self.treeWidget.topLevelItem(self.count).setText(0, _translate("MainWindow", (
+                            "  " * self.slashes[self.directonsUsed.index(el)] + str(os.path.basename(el)))))
+                    self.count += 1
+        except WindowsError:
+            return
+
+    def run(self):
+        try:
+            print(self.file_working)
+            Runner.run(Runner(self.file_working))
+        except AttributeError:
+            return
 
     def retranslateUi(self):
         self.main_window.setWindowTitle(self.translate("MainWindow", "Mandarine IDE"))
@@ -179,7 +246,7 @@ class MainWindow:
         self.menuEdit.setTitle(self.translate("MainWindow", "Edit"))
         self.menuRun.setTitle(self.translate("MainWindow", "Run"))
         self.actionNew.setText(self.translate("MainWindow", "New Project"))
-        self.actionOpen.setText(self.translate("MainWindow", "Open Project"))
+        self.actionOpen.setText(self.translate("MainWindow", "Open File"))
         self.actionSave.setText(self.translate("MainWindow", "Save"))
         self.actionSave_as.setText(self.translate("MainWindow", "Save as"))
         self.actionUndo.setText(self.translate("MainWindow", "Undo"))
