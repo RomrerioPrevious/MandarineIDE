@@ -17,6 +17,7 @@ class MainWindow:
         self.text_edits = []
         self.directionsList = []
         self.directonsUsed = []
+        self.paths = []
         self.slashes = []
         self.file_working = ""
         self.translate = QtCore.QCoreApplication.translate
@@ -150,7 +151,7 @@ class MainWindow:
         self.actionOpen_Folder.triggered.connect(self.open_folder)
         self.actionRun.triggered.connect(self.run)
 
-    def add_new_tab(self, name: str, path1: str):
+    def add_new_tab(self, name: str, path: str):
         if not len(self.tabs):
             self.tabWidget.setObjectName("tabWidget")
         else:
@@ -166,7 +167,7 @@ class MainWindow:
         textEdit.setStyleSheet(f"background-color: rgb({self.theme['work_space']});\n"
                                f"color: rgb({self.theme['white']});")
         textEdit.setObjectName("textEdit")
-        painter = CodeEdit(qedit=textEdit, theme=self.theme, path=path1)
+        painter = CodeEdit(qedit=textEdit, theme=self.theme, path=path)
         painter.colorize()
         self.text_edits.append(textEdit)
 
@@ -177,6 +178,7 @@ class MainWindow:
 
     def open(self):
         file_name = QFileDialog.getOpenFileName(self.centralwidget, 'Выберите файл', '')[0]
+        self.paths.append(file_name)
         try:
             self.add_new_tab(file_name, file_name)
         except FileNotFoundError:
@@ -195,8 +197,16 @@ class MainWindow:
             return
 
     def save(self):
-        code = self.text_edits[self.tabWidget.tabPosition()].toPlainText()
-        with open(self.file_working, "w") as file:
+        edit: QtWidgets.QTextEdit = self.text_edits[self.tabWidget.tabPosition()]
+        code = edit.toPlainText()
+        with open(self.paths[self.tabWidget.tabPosition()], "w") as file:
+            file.write(code)
+        painter = CodeEdit(edit,
+                           self.paths[self.tabWidget.tabPosition()],
+                           self.theme)
+        painter.colorize()
+        code = edit.toPlainText()
+        with open(self.paths[self.tabWidget.tabPosition()], "w") as file:
             file.write(code)
 
     def open_folder(self):
@@ -226,7 +236,6 @@ class MainWindow:
 
     def run(self):
         try:
-            print(self.file_working)
             Runner.run(Runner(self.file_working))
         except AttributeError:
             return
@@ -238,20 +247,13 @@ class MainWindow:
         self.treeWidget.headerItem().setText(0, self.translate("MainWindow", "MandarinIDE"))
         __sortingEnabled = self.treeWidget.isSortingEnabled()
         self.treeWidget.setSortingEnabled(False)
-        self.treeWidget.topLevelItem(0).setText(0, self.translate("MainWindow", "Main.py"))
-        self.treeWidget.topLevelItem(1).setText(0, self.translate("MainWindow", "Text.md"))
         self.treeWidget.setSortingEnabled(__sortingEnabled)
 
         self.menuMandarin.setTitle(self.translate("MainWindow", "File"))
-        self.menuEdit.setTitle(self.translate("MainWindow", "Edit"))
         self.menuRun.setTitle(self.translate("MainWindow", "Run"))
         self.actionNew.setText(self.translate("MainWindow", "New Project"))
         self.actionOpen.setText(self.translate("MainWindow", "Open File"))
         self.actionSave.setText(self.translate("MainWindow", "Save"))
         self.actionSave_as.setText(self.translate("MainWindow", "Save as"))
-        self.actionUndo.setText(self.translate("MainWindow", "Undo"))
-        self.actionCut.setText(self.translate("MainWindow", "Cut"))
-        self.actionCopy.setText(self.translate("MainWindow", "Copy"))
-        self.actionPaste.setText(self.translate("MainWindow", "Paste"))
         self.actionRun.setText(self.translate("MainWindow", "Run"))
         self.actionOpen_Folder.setText(self.translate("MainWindow", "Open Folder"))
