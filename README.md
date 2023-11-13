@@ -7,7 +7,7 @@ Mandaine IDE is IDE for python.
 ## Credits
 
 - [Roman Vikulin](https://github.com/RomrerioPrevious/)
-- [Andrey Ryazanov](https://github.com/dima117216)
+- [Dmitry Ryazanov](https://github.com/dima117216)
 
 ## Librares
 
